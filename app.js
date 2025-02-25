@@ -6,6 +6,8 @@ const app = express()
 // # importing DB function
 const connectDB = require("./db/connect")
 
+const productsRouter = require("./routes/products")
+
 // #Importing Not found and error middleware
 const notFoundMiddleware = require("./middleware/not-found")
 const errorMiddleware = require("./middleware/error-handler")
@@ -19,7 +21,9 @@ app.get("/", (req, res) => {
   res.send('<h1>Store API<a href="/api/v1/products"> products routes</a></h1>')
 })
 
-// #Products route
+app.use("/api/v1/products", productsRouter)
+
+// # Products route
 // All products routes will go here
 
 app.use(notFoundMiddleware)
