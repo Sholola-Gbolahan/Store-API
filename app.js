@@ -3,6 +3,9 @@ require("dotenv").config()
 const express = require("express")
 const app = express()
 
+// # importing DB function
+const connectDB = require("./db/connect")
+
 // #Importing Not found and error middleware
 const notFoundMiddleware = require("./middleware/not-found")
 const errorMiddleware = require("./middleware/error-handler")
@@ -27,7 +30,8 @@ const port = process.env.PORT || 3000
 const start = async () => {
   try {
     // # Connect to DB
-    // ensure database is connected before App listen
+    // Passing the database url to make the connection
+    await connectDB(process.env.MONGO_URI)
 
     // # Listen to app from port
     app.listen(port, console.log(`Server is listening to the port ${port}...`))
