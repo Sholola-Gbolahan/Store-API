@@ -2,7 +2,7 @@ const Products = require("../models/product")
 
 const getAllProductsStatic = async (req, res) => {
   try {
-    const products = await Products.find({ company: "marcos" })
+    const products = await Products.find({ name: "accent chair" })
 
     res.status(200).json({ products, nbHits: products.length })
   } catch (error) {
@@ -10,7 +10,7 @@ const getAllProductsStatic = async (req, res) => {
   }
 }
 const getAllProducts = async (req, res) => {
-  const { featured, company } = req.query // Looking for only featured
+  const { featured, company, name } = req.query // Looking for only featured
 
   const queryObject = {}
 
@@ -18,9 +18,12 @@ const getAllProducts = async (req, res) => {
     // if featured is true then set featured property to true, else false set it to false
     queryObject.featured = featured === "true" ? true : false
   }
-  if (featured) {
+  if (company) {
     // if company  property to exit,set company in queryObject to it value
     queryObject.company = company
+  }
+  if (name) {
+    queryObject.name = name
   }
 
   console.log(queryObject)
