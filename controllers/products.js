@@ -1,14 +1,18 @@
 const Products = require("../models/product")
 
 const getAllProductsStatic = async (req, res) => {
+  const search = "din" // this is our re.query
   try {
-    const products = await Products.find({ name: "accent chair" })
+    const products = await Products.find({
+      name: { $regex: search, $options: "i" },
+    })
 
     res.status(200).json({ products, nbHits: products.length })
   } catch (error) {
     console.log(error)
   }
 }
+
 const getAllProducts = async (req, res) => {
   const { featured, company, name } = req.query // Looking for only featured
 
@@ -23,7 +27,7 @@ const getAllProducts = async (req, res) => {
     queryObject.company = company
   }
   if (name) {
-    queryObject.name = name
+    queryObject.name = { $regex: name, $options: "i" }
   }
 
   console.log(queryObject)
