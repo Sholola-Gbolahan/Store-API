@@ -10,7 +10,17 @@ const getAllProductsStatic = async (req, res) => {
   }
 }
 const getAllProducts = async (req, res) => {
-  const products = await Products.find(req.query)
+  const { featured } = req.query // Looking for only featured
+
+  const queryObject = {}
+
+  if (featured) {
+    // if featured is true then set featured property to true, else false set it to false
+    queryObject.featured = featured === "true" ? true : false
+  }
+  console.log(queryObject)
+  // This show list of all products if passed query not exit
+  const products = await Products.find(queryObject)
   res.status(200).json({ products, nbHits: products.length })
 }
 
