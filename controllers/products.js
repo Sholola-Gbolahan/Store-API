@@ -3,9 +3,7 @@ const Products = require("../models/product")
 const getAllProductsStatic = async (req, res) => {
   const search = "din" // this is our re.query
   try {
-    const products = await Products.find({
-      name: { $regex: search, $options: "i" },
-    })
+    const products = await Products.find({}).sort("-name price")
 
     res.status(200).json({ products, nbHits: products.length })
   } catch (error) {
