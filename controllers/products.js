@@ -3,10 +3,14 @@ const Products = require("../models/product")
 const getAllProductsStatic = async (req, res) => {
   const search = "din" // this is our re.query
   try {
-    // The limit determin the amount of products to display
-    const products = await Products.find({}).select("name price").limit(4)
+    // The skip func skips the assigned number of products
+    const products = await Products.find({})
+      .sort("name")
+      .select("name price")
+      .limit(10)
+      .skip(1)
 
-    res.status(200).json({ products, nbHits: products.length })
+    res.status(200).json({ nbHits: products.length, products })
   } catch (error) {
     console.log(error)
   }
