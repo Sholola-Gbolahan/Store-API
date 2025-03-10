@@ -3,8 +3,8 @@ const Products = require("../models/product")
 const getAllProductsStatic = async (req, res) => {
   const search = "din" // this is our re.query
   try {
-    // The select options only select and views the data specified
-    const products = await Products.find({}).select("name price")
+    // The limit determin the amount of products to display
+    const products = await Products.find({}).select("name price").limit(4)
 
     res.status(200).json({ products, nbHits: products.length })
   } catch (error) {
