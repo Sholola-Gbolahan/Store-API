@@ -38,7 +38,10 @@ const getAllProducts = async (req, res) => {
     const shortList = sort.split(",").join(" ")
     result = result.sort(shortList)
   }
-
+  // setting up a default sort where user hasn't pass in the sort key using created time
+  else {
+    result = result.sort("createdAT")
+  }
   const products = await result
   res.status(200).json({ products, nbHits: products.length })
 }
