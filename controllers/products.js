@@ -12,7 +12,7 @@ const getAllProductsStatic = async (req, res) => {
 }
 
 const getAllProducts = async (req, res) => {
-  const { featured, company, name } = req.query // Looking for only featured
+  const { featured, company, name, sort } = req.query // Looking for only featured
 
   const queryObject = {}
 
@@ -28,9 +28,18 @@ const getAllProducts = async (req, res) => {
     queryObject.name = { $regex: name, $options: "i" }
   }
 
-  console.log(queryObject)
+  // console.log(queryObject)
+
   // This show list of all products if passed query not exit
-  const products = await Products.find(queryObject)
+  let result = Products.find(queryObject)
+
+  if (sort) {
+    // Splinting on  comma "'" and joining it back from the array by adding empty space
+    const shortList = sort.split(",").join(" ")
+    result = result.sort(shortList)
+  }
+
+  const products = await result
   res.status(200).json({ products, nbHits: products.length })
 }
 
