@@ -4,11 +4,9 @@ const getAllProductsStatic = async (req, res) => {
   const search = "din" // this is our re.query
   try {
     // The skip func skips the assigned number of products
-    const products = await Products.find({})
-      .sort("name")
-      .select("name price")
-      .limit(10)
-      .skip(1)
+    const products = await Products.find({}).sort("name").select("name price")
+    // .limit(10)
+    // .skip(1)
 
     res.status(200).json({ nbHits: products.length, products })
   } catch (error) {
@@ -55,6 +53,14 @@ const getAllProducts = async (req, res) => {
     const fieldsList = fields.split(",").join(" ")
     result = result.select(fieldsList)
   }
+
+  // converting the page string value to number and setting a default page on 1
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 10 // getting limit from query and if no limit set default to 10
+  const skip = (page - 1) * limit // Logic setup of how many products to skip - this goes to the next page
+
+  // Applying funcs to products
+  result = result.skip(skip).limit(limit)
 
   const products = await result
   res.status(200).json({ products, nbHits: products.length })
