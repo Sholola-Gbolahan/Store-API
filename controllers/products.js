@@ -17,7 +17,7 @@ const getAllProductsStatic = async (req, res) => {
 }
 
 const getAllProducts = async (req, res) => {
-  const { featured, company, name, sort, fields } = req.query // Looking for only featured
+  const { featured, company, name, sort, fields, numericFilters } = req.query // Looking for only featured
 
   const queryObject = {}
 
@@ -31,6 +31,10 @@ const getAllProducts = async (req, res) => {
   }
   if (name) {
     queryObject.name = { $regex: name, $options: "i" }
+  }
+
+  if (numericFilters) {
+    console.log(numericFilters)
   }
 
   // console.log(queryObject)
