@@ -4,7 +4,9 @@ const getAllProductsStatic = async (req, res) => {
   const search = "din" // this is our re.query
   try {
     // The skip func skips the assigned number of products
-    const products = await Products.find({}).sort("name").select("name price")
+    const products = await Products.find({ price: { $gt: 30 } })
+      .sort("price")
+      .select("name price")
     // .limit(10)
     // .skip(1)
 
