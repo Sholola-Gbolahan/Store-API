@@ -34,7 +34,23 @@ const getAllProducts = async (req, res) => {
   }
 
   if (numericFilters) {
-    console.log(numericFilters)
+    const operatorMap = {
+      ">": "$gt", // greater than
+      ">=": "$gte", //greater than or equal
+      "=": "$eq", //equals to
+      "<": "$lt", // lessthan than
+      "<=": "$lte", //lessthan than or equal
+    }
+
+    // Regular expression to match operators
+    const regEx = /\b(<|>|>=|=|<|<=)\b/g
+
+    // Replace operators with MongoDB operators
+    let filters = numericFilters.replace(
+      regEx,
+      (match) => `--${operatorMap[match]}`
+    )
+    console.log(filters)
   }
 
   // console.log(queryObject)
@@ -51,7 +67,7 @@ const getAllProducts = async (req, res) => {
   }
   // setting up a default sort where user hasn't pass in the sort key using created time
   else {
-    result = result.sort("createdAT")
+    result = result.sort("createdAt")
   }
 
   //  FIELDS
@@ -73,7 +89,7 @@ const getAllProducts = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-  const product = await Product.create(req.body)
+  const product = await Products.create(req.body)
   res.status(200).json({ product })
 }
 
