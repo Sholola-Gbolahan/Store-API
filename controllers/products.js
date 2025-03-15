@@ -48,12 +48,20 @@ const getAllProducts = async (req, res) => {
     // Replace operators with MongoDB operators
     let filters = numericFilters.replace(
       regEx,
-      (match) => `--${operatorMap[match]}`
+      (match) => `--${operatorMap[match]}--`
     )
-    console.log(filters)
+    const options = ["price", "rating"]
+
+    // spliting string values into an array
+    filters = filters.split(",").forEach((item) => {
+      const [field, operator, value] = item.split("--")
+      if (options.includes(field)) {
+        queryObject[field] = { [operator]: Number(value) }
+      }
+    })
   }
 
-  // console.log(queryObject)
+  console.log(queryObject)
 
   // This show list of all products if passed query not exit
   let result = Products.find(queryObject)
